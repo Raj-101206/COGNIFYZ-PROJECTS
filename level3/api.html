@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Famous Scientist</title>
+    <style>
+        body{
+            font-family: Arial, Helvetica, sans-serif;
+            text-align: center;
+            background-color: rgb(94, 155, 230);
+            padding: 30px;
+        }
+        h1{
+            color: black;
+            font-size: 50px;
+        }
+        img{
+            width: 300px;
+            height: auto;
+            border: 4px solid black;
+            border-radius: 20px;
+            margin-top: 20px;
+
+        }
+        p{
+            font-size: 20px;
+             margin-top: 25px;
+             font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+             
+        }
+        button{
+            margin-top: 20px;
+            padding: 12px 24px;
+            font-size: 20px;
+            background-color: #252627;
+            color: white;
+            border: 2px solid rgb(83, 44, 212);
+            border-radius: 10px;
+            cursor: pointer;
+
+        }
+        
+        button:hover{
+            background-color: blueviolet;
+        }
+
+        #bio{
+            max-width: 700px;
+            margin: 20px auto;
+            color: #333;
+        }
+
+    </style>
+</head>
+<body>
+    <h1 id="scientistName">Famous Scientist</h1>
+    <img id="scientistImage" src="" >
+    <p id="bio">Biography will appear here...</p>
+    <button onclick="showNext()">Next Scientist</button>
+
+    <script> 
+    
+        const scientists= [
+            "Abdul_Kalam",
+            "Albert_Einstein",
+            "Isac_Newton",
+            "Marie_Curie",
+            "C_V_Raman",
+            "Nikola_Tesla",
+            "Charles_Darwin",
+            "Steve_Jobs",
+            
+        ]
+
+        let currentIndex=0
+
+        function showNext(){
+            const name=scientists[currentIndex]
+            const api=`https://en.wikipedia.org/api/rest_v1/page/summary/${name}`
+
+            fetch(api)
+            .then(response =>response.json())
+            .then(data => {
+                document.getElementById('scientistName').innerText=data.title;
+                document.getElementById('scientistImage').src=data.thumbnail?.source|| '';
+                document.getElementById("bio").innerText=data.extract || "No Biography Available"
+            })
+
+           .catch(error=> {
+            document.getElementById('bio').innerText='Error loading data'
+            console.error(error)
+           })
+           currentIndex=(currentIndex+1) % scientists.length
+
+        }
+        showNext()
+
+    </script>
+</body>
+</html>
