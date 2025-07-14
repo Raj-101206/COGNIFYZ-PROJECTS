@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>form</title>
+    <link rel="stylesheet" href="style.css">
+
+</head>
+<body>
+    <h2>Form Styling and Validation</h2>
+    <div class="container">
+        <form id="myform">
+            <h1>Application form</h1>
+            <div class="inputgroup">
+                <label for="username">Username:</label>
+                <input type="text" id="username" name="username">
+                <div class="error"></div>
+            </div>
+            <div class="inputgroup">
+                <label for="email">Mail Id:</label>
+                <input type="text" id="email" name="email">
+                <div class="error"></div>
+            </div>
+            <div class="inputgroup">
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password">
+                <div class="error"></div>
+            </div>
+              <div class="inputgroup">
+                <label for="repassword">Confirm Password:</label>
+                <input type="password" id="repass" name="repassword">
+                <div class="error"></div>
+            </div>
+            <button type="submit">Submit</button>
+        </form>
+        <script >
+             const password=document.querySelector('#password')
+            const repass=document.querySelector('#repass')
+            const form=document.querySelector('#myform')
+            const username=document.querySelector('#username')
+            const email=document.querySelector('#email')
+
+            form.addEventListener('submit', (e)=>{
+                e.preventDefault()
+                validateInputs()
+            })
+
+            function validateInputs(){
+                const usernameVal=username.value.trim()
+                const emailVal=email.value.trim()
+                const passwordVal=password.value.trim()
+                const repassVal=repass.value.trim()
+                let success=true
+
+                if (usernameVal== ''){
+                    success=false
+                    setError(username,'username is required')
+                }
+                else{
+                    setSuccess(username)
+                }
+                if (emailVal==''){
+                    success=false
+                    setError(email,'email is required')
+                }
+                else if(!validateEmail(emailVal)){
+                    success=false
+                    setError(email,'Email is invalid')
+                }
+                else{
+                    setSuccess(email)
+                }
+                if(passwordVal==''){
+                    success=false
+                    setError(password,"password is required")
+                }
+                else if (passwordVal.length<8){
+                    success=false
+                    setError(password,'password must be atleast 8 char long')
+                }
+                else{
+                    setSuccess(password)
+                }
+                if(repassVal==''){
+                    success=false
+                    setError(repass,'confirm password is required')
+                }
+                else if (repassVal!=passwordVal){
+                    success=false
+                    setError(repass,"password do not match")
+                }
+                else{
+                    setSuccess(repass)
+                }
+                return success
+
+
+
+            }
+
+          
+            function setError(element,message){
+                if(!element) return
+                const InputGroup=element.parentElement
+                if(!InputGroup) return
+                const errorElement=InputGroup.querySelector('.error')
+                if(errorElement)errorElement.innerText=message
+                
+                InputGroup.classList.add('error')
+                InputGroup.classList.remove('success')
+            }
+
+              
+            function setSuccess(element){
+                if(!element) return
+                const InputGroup=element.parentElement
+                if(!InputGroup) return
+                const errorElement=InputGroup.querySelector('.error')
+                if(errorElement)errorElement.innerText=''
+
+                InputGroup.classList.add('success')
+                InputGroup.classList.remove('error')
+            }
+
+            const validateEmail= (email)=> {
+                return String(email)
+                .toLowerCase()
+                .match(
+                     /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
+                )
+            }
+       
+        </script>
+    </div>
+    
+</body>
+</html>
